@@ -55,4 +55,12 @@ public class InventoryRecord {
 
         quantity -= amount;
     }
+
+    public void adjustQuantity(int newQuantity) {
+        if (newQuantity < 0) {
+            throw new IllegalArgumentException("Adjusted quantity must not be negative.");
+        }
+
+        quantity = newQuantity;
+    }
 }
