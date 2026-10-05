@@ -1,8 +1,12 @@
 package com.stocksense;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
 public class StockSenseApplication {
 
     public static void main(String[] args) {
-        System.out.println("StockSense Java baseline is running.");
+        SpringApplication.run(StockSenseApplication.class, args);
     }
 }
