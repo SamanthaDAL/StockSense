@@ -7,6 +7,7 @@ import com.stocksense.dto.InventoryRecordRequest;
 import com.stocksense.dto.InventoryRecordResponse;
 import com.stocksense.dto.StockMovementRequest;
 import com.stocksense.service.InventoryService;
+import com.stocksense.dto.AdjustmentRequest;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -75,6 +76,23 @@ public class InventoryController {
                         request.getSku(),
                         request.getLocationCode(),
                         request.getAmount()
+                );
+
+                return new InventoryRecordResponse(
+                        record.getProduct().getSku(),
+                        record.getLocation().getCode(),
+                        record.getQuantity()
+                );
+        }
+
+        @PostMapping("/adjust")
+        public InventoryRecordResponse adjustQuantity(
+                @RequestBody AdjustmentRequest request) {
+
+                InventoryRecord record = inventoryService.adjustQuantity(
+                        request.getSku(),
+                        request.getLocationCode(),
+                        request.getNewQuantity()
                 );
 
                 return new InventoryRecordResponse(
