@@ -3,10 +3,12 @@ package com.stocksense.service;
 import com.stocksense.domain.InventoryRecord;
 import com.stocksense.domain.Location;
 import com.stocksense.domain.Product;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class InventoryService {
 
     private final List<Product> products = new ArrayList<>();
@@ -49,5 +51,16 @@ public class InventoryService {
 
     public List<InventoryRecord> getInventoryRecords() {
         return new ArrayList<>(inventoryRecords);
+    }
+
+    public InventoryRecord findInventoryRecord(String sku, String locationCode) {
+        for (InventoryRecord record : inventoryRecords) {
+            if (record.getProduct().getSku().equals(sku)
+                    && record.getLocation().getCode().equals(locationCode)) {
+                return record;
+            }
+        }
+
+        return null;
     }
 }
