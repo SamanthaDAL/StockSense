@@ -3,33 +3,41 @@ package com.stocksense.service;
 import com.stocksense.domain.InventoryRecord;
 import com.stocksense.domain.Location;
 import com.stocksense.domain.Product;
+import com.stocksense.repository.InventoryRecordRepository;
+import com.stocksense.repository.LocationRepository;
+import com.stocksense.repository.ProductRepository;
+
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class InventoryService {
 
-    private final List<Product> products = new ArrayList<>();
-    private final List<InventoryRecord> inventoryRecords = new ArrayList<>();
+    private final ProductRepository productRepository;
+    private final LocationRepository locationRepository;
+    private final InventoryRecordRepository inventoryRecordRepository;
+
+    public InventoryService(
+            ProductRepository productRepository,
+            LocationRepository locationRepository,
+            InventoryRecordRepository inventoryRecordRepository) {
+
+        this.productRepository = productRepository;
+        this.locationRepository = locationRepository;
+        this.inventoryRecordRepository = inventoryRecordRepository;
+    }
 
     public void addProduct(Product product) {
         if (product == null) {
             throw new IllegalArgumentException("Product must not be null.");
         }
 
-        products.add(product);
+        productRepository.save(product);
     }
 
     public Product findProductBySku(String sku) {
-        for (Product product : products) {
-            if (product.getSku().equals(sku)) {
-                return product;
-            }
-        }
-
-        return null;
+        return productRepository.findBySku(sku).orElse(null);
     }
 
     public InventoryRecord createInventoryRecord(
@@ -37,30 +45,65 @@ public class InventoryService {
             Location location,
             int quantity) {
 
-        InventoryRecord record =
-                new InventoryRecord(product, location, quantity);
+        Location savedLocation = locationRepository
+                .findByCode(location.getCode())
+                .orElseGet(() -> locationRepository.save(location));
 
-        inventoryRecords.add(record);
+        InventoryRecord record = new InventoryRecord(
+                product,
+                savedLocation,
+                quantity
+        );
 
-        return record;
+        return inventoryRecordRepository.save(record);
+    }
+
+    public InventoryRecord findInventoryRecord(
+            String sku,
+            String locationCode) {
+
+        return inventoryRecordRepository
+                .findByProductSkuAndLocationCode(sku, locationCode)
+                .orElse(null);
     }
 
     public List<Product> getProducts() {
-        return new ArrayList<>(products);
+        return productRepository.findAll();
     }
 
     public List<InventoryRecord> getInventoryRecords() {
-        return new ArrayList<>(inventoryRecords);
+        return inventoryRecordRepository.findAll();
     }
 
-    public InventoryRecord findInventoryRecord(String sku, String locationCode) {
-        for (InventoryRecord record : inventoryRecords) {
-            if (record.getProduct().getSku().equals(sku)
-                    && record.getLocation().getCode().equals(locationCode)) {
-                return record;
-            }
+    public InventoryRecord stockIn(
+        String sku,
+        String locationCode,
+        int amount) {
+
+        InventoryRecord record = findInventoryRecord(sku, locationCode);
+
+        if (record == null) {
+            throw new IllegalArgumentException("Inventory record not found.");
         }
 
-        return null;
+        record.stockIn(amount);
+
+        return inventoryRecordRepository.save(record);
+    }
+
+    public InventoryRecord stockOut(
+            String sku,
+            String locationCode,
+            int amount) {
+
+        InventoryRecord record = findInventoryRecord(sku, locationCode);
+
+        if (record == null) {
+            throw new IllegalArgumentException("Inventory record not found.");
+        }
+
+        record.stockOut(amount);
+
+        return inventoryRecordRepository.save(record);
     }
 }

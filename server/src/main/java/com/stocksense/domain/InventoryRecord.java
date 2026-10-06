@@ -1,10 +1,31 @@
 package com.stocksense.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+@Entity
 public class InventoryRecord {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "location_id", nullable = false)
     private Location location;
+
     private int quantity;
+
+    protected InventoryRecord() {
+    }
 
     public InventoryRecord(Product product, Location location, int quantity) {
         if (product == null) {
@@ -22,6 +43,10 @@ public class InventoryRecord {
         this.product = product;
         this.location = location;
         this.quantity = quantity;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Product getProduct() {

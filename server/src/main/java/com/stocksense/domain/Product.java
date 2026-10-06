@@ -1,11 +1,32 @@
 package com.stocksense.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
     private String sku;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String category;
+
+    @Column(nullable = false)
     private int reorderLevel;
+
+    protected Product() {
+    }
 
     public Product(String sku, String name, String category, int reorderLevel) {
         if (sku == null || sku.isBlank()) {
@@ -28,6 +49,10 @@ public class Product {
         this.name = name;
         this.category = category;
         this.reorderLevel = reorderLevel;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getSku() {

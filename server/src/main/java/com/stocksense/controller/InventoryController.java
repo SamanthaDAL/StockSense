@@ -53,45 +53,34 @@ public class InventoryController {
 
     @PostMapping("/stock-in")
     public InventoryRecordResponse stockIn(
-            @RequestBody StockMovementRequest request) {
+        @RequestBody StockMovementRequest request) {
+                InventoryRecord record = inventoryService.stockIn(
+                        request.getSku(),
+                        request.getLocationCode(),
+                        request.getAmount()
+                );
 
-        InventoryRecord record = inventoryService.findInventoryRecord(
-                request.getSku(),
-                request.getLocationCode()
-        );
-
-        if (record == null) {
-            throw new IllegalArgumentException("Inventory record not found.");
+                return new InventoryRecordResponse(
+                        record.getProduct().getSku(),
+                        record.getLocation().getCode(),
+                        record.getQuantity()
+                );
         }
-
-        record.stockIn(request.getAmount());
-
-        return new InventoryRecordResponse(
-                record.getProduct().getSku(),
-                record.getLocation().getCode(),
-                record.getQuantity()
-        );
-    }
 
     @PostMapping("/stock-out")
     public InventoryRecordResponse stockOut(
-            @RequestBody StockMovementRequest request) {
+        @RequestBody StockMovementRequest request) {
 
-        InventoryRecord record = inventoryService.findInventoryRecord(
-                request.getSku(),
-                request.getLocationCode()
-        );
+                InventoryRecord record = inventoryService.stockOut(
+                        request.getSku(),
+                        request.getLocationCode(),
+                        request.getAmount()
+                );
 
-        if (record == null) {
-            throw new IllegalArgumentException("Inventory record not found.");
+                return new InventoryRecordResponse(
+                        record.getProduct().getSku(),
+                        record.getLocation().getCode(),
+                        record.getQuantity()
+                );
         }
-
-        record.stockOut(request.getAmount());
-
-        return new InventoryRecordResponse(
-                record.getProduct().getSku(),
-                record.getLocation().getCode(),
-                record.getQuantity()
-        );
-    }
 }
