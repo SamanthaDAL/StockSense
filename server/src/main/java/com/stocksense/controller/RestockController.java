@@ -14,6 +14,8 @@ import com.stocksense.dto.RestockRequestCreateRequest;
 import com.stocksense.dto.RestockRequestResponse;
 import com.stocksense.service.RestockService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/restocks")
 public class RestockController {
@@ -26,7 +28,7 @@ public class RestockController {
 
     @PostMapping
     public RestockRequestResponse create(
-            @RequestBody RestockRequestCreateRequest request) {
+            @Valid @RequestBody RestockRequestCreateRequest request) {
 
         return toResponse(
                 restockService.create(

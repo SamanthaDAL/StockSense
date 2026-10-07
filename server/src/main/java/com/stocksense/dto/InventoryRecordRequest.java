@@ -1,10 +1,20 @@
 package com.stocksense.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
+
 public class InventoryRecordRequest {
 
+    @NotBlank(message = "SKU must not be blank.")
     private String sku;
+
+    @NotBlank(message = "Location code must not be blank.")
     private String locationCode;
+
+    @NotBlank(message = "Location name must not be blank.")
     private String locationName;
+
+    @PositiveOrZero(message = "New quantity must not be negative.")
     private int quantity;
 
     public InventoryRecordRequest() {

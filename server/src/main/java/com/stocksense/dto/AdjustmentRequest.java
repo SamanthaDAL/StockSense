@@ -1,9 +1,17 @@
 package com.stocksense.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
+
 public class AdjustmentRequest {
 
+    @NotBlank(message = "SKU must not be blank.")
     private String sku;
+
+    @NotBlank(message = "Location code must not be blank.")
     private String locationCode;
+
+    @PositiveOrZero(message = "New quantity must not be negative.")
     private int newQuantity;
 
     public AdjustmentRequest() {

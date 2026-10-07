@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/inventory")
 public class InventoryController {
@@ -58,7 +60,7 @@ public class InventoryController {
 
     @PostMapping("/stock-in")
     public InventoryRecordResponse stockIn(
-        @RequestBody StockMovementRequest request) {
+        @Valid @RequestBody StockMovementRequest request) {
                 InventoryRecord record = inventoryService.stockIn(
                         request.getSku(),
                         request.getLocationCode(),

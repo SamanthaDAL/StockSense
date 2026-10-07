@@ -1,10 +1,20 @@
 package com.stocksense.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
+
 public class ProductRequest {
 
+    @NotBlank(message = "SKU must not be blank.")
     private String sku;
+
+    @NotBlank(message = "Name must not be blank.")
     private String name;
+
+    @NotBlank(message = "Category must not be blank.")
     private String category;
+
+    @PositiveOrZero(message = "Reorder level must not be negative.")
     private int reorderLevel;
 
     public ProductRequest() {
