@@ -170,4 +170,26 @@ public class InventoryService {
 
         return savedRecord;
     }
+
+    public List<InventoryRecord> getLowStockRecords() {
+        return inventoryRecordRepository.findLowStock();
+    }
+
+    public List<InventoryRecord> searchInventory(
+        String text,
+        String category) {
+
+        String normalizedText =
+                text == null || text.isBlank() ? null : text.trim();
+
+        String normalizedCategory =
+                category == null || category.isBlank()
+                        ? null
+                        : category.trim();
+
+        return inventoryRecordRepository.searchInventory(
+                normalizedText,
+                normalizedCategory
+        );
+    }
 }

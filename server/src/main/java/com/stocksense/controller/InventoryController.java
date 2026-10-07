@@ -9,10 +9,14 @@ import com.stocksense.dto.StockMovementRequest;
 import com.stocksense.service.InventoryService;
 import com.stocksense.dto.AdjustmentRequest;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/inventory")
@@ -100,5 +104,33 @@ public class InventoryController {
                         record.getLocation().getCode(),
                         record.getQuantity()
                 );
+        }
+
+        @GetMapping("/low-stock")
+        public List<InventoryRecordResponse> getLowStockRecords() {
+
+        return inventoryService.getLowStockRecords()
+                .stream()
+                .map(record -> new InventoryRecordResponse(
+                        record.getProduct().getSku(),
+                        record.getLocation().getCode(),
+                        record.getQuantity()
+                ))
+                .toList();
+        }
+
+        @GetMapping("/search")
+        public List<InventoryRecordResponse> searchInventory(
+                @RequestParam(required = false) String text,
+                @RequestParam(required = false) String category) {
+
+        return inventoryService.searchInventory(text, category)
+                .stream()
+                .map(record -> new InventoryRecordResponse(
+                        record.getProduct().getSku(),
+                        record.getLocation().getCode(),
+                        record.getQuantity()
+                ))
+                .toList();
         }
 }
