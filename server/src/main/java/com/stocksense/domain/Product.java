@@ -51,6 +51,30 @@ public class Product {
         this.reorderLevel = reorderLevel;
     }
 
+    public void updateDetails(
+        String name,
+        String category,
+        int reorderLevel) {
+
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name must not be blank.");
+        }
+
+        if (category == null || category.isBlank()) {
+            throw new IllegalArgumentException("Category must not be blank.");
+        }
+
+        if (reorderLevel < 0) {
+            throw new IllegalArgumentException(
+                    "Reorder level must not be negative."
+            );
+        }
+
+        this.name = name;
+        this.category = category;
+        this.reorderLevel = reorderLevel;
+    }
+
     public Long getId() {
         return id;
     }

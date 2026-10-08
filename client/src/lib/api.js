@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://localhost:8080/api'
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'
 
 export async function apiRequest(path, options = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -10,7 +11,19 @@ export async function apiRequest(path, options = {}) {
   })
 
   if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}`)
+    let message = `API request failed with status ${response.status}`
+
+    try {
+      const errorBody = await response.json()
+
+      if (errorBody.message) {
+        message = errorBody.message
+      }
+    } catch {
+      // Keep the fallback message if the response is not JSON.
+    }
+
+    throw new Error(message)
   }
 
   return response.json()

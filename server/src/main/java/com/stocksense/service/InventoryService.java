@@ -78,6 +78,28 @@ public class InventoryService {
         return productRepository.findAll();
     }
 
+    @Transactional
+    public Product updateProduct(
+            String sku,
+            String name,
+            String category,
+            int reorderLevel) {
+
+        Product product = productRepository
+                .findBySku(sku)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Product not found.")
+                );
+
+        product.updateDetails(
+                name,
+                category,
+                reorderLevel
+        );
+
+        return productRepository.save(product);
+    }
+
     public List<InventoryRecord> getInventoryRecords() {
         return inventoryRecordRepository.findAll();
     }

@@ -168,6 +168,41 @@ button {
   font-size: 0.8rem;
 }
 
+.product-form {
+  margin-bottom: 22px;
+  padding: 22px;
+  display: grid;
+  gap: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: white;
+}
+
+.product-form label {
+  display: grid;
+  gap: 6px;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.product-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #dbe0e8;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.product-form .primary-button {
+  width: fit-content;
+}
+
+.form-error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 0.9rem;
+}
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -190,6 +225,35 @@ button {
 
 .panel h3 {
   margin: 0;
+}
+
+.product-list {
+  margin-top: 20px;
+  display: grid;
+}
+
+.product-row {
+  padding: 16px 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 16px;
+  align-items: center;
+  border-bottom: 1px solid #eef0f4;
+}
+
+.product-row:last-child {
+  border-bottom: 0;
+}
+
+.product-row p {
+  margin: 4px 0 0;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.product-row span {
+  color: #64748b;
+  font-size: 0.9rem;
 }
 
 .empty-state {
@@ -268,5 +332,37 @@ button {
 
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .product-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .product-row-button {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .product-row-button:hover {
+    background: #f8fafc;
+  }
+
+  .product-detail {
+    margin-top: 20px;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #f8fafc;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
   }
 }
