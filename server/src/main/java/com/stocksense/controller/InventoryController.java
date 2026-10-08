@@ -8,6 +8,7 @@ import com.stocksense.dto.InventoryRecordResponse;
 import com.stocksense.dto.StockMovementRequest;
 import com.stocksense.service.InventoryService;
 import com.stocksense.dto.AdjustmentRequest;
+import com.stocksense.dto.StockMovementResponse;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/inventory")
+@CrossOrigin(origins = "http://localhost:5173")
 public class InventoryController {
 
     private final InventoryService inventoryService;
@@ -132,6 +135,24 @@ public class InventoryController {
                         record.getProduct().getSku(),
                         record.getLocation().getCode(),
                         record.getQuantity()
+                ))
+                .toList();
+        }
+
+        @GetMapping("/movements")
+        public List<StockMovementResponse> getMovementHistory(
+                @RequestParam String sku,
+                @RequestParam String locationCode) {
+
+        return inventoryService
+                .getMovementsForRecord(sku, locationCode)
+                .stream()
+                .map(movement -> new StockMovementResponse(
+                        movement.getInventoryRecord().getProduct().getSku(),
+                        movement.getInventoryRecord().getLocation().getCode(),
+                        movement.getType().name(),
+                        movement.getQuantityDelta(),
+                        movement.getCreatedAt()
                 ))
                 .toList();
         }

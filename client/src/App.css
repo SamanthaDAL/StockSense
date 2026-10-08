@@ -197,6 +197,12 @@ button {
   width: fit-content;
 }
 
+.form-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .form-error {
   margin: 0;
   color: #b91c1c;
@@ -256,6 +262,27 @@ button {
   font-size: 0.9rem;
 }
 
+.product-row-button {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.product-row-button:hover {
+  background: #f8fafc;
+}
+
+.product-detail {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
 .empty-state {
   min-height: 260px;
   display: grid;
@@ -299,12 +326,96 @@ button {
   border-bottom: 0;
 }
 
+.movement-workspace {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 18px;
+}
+
+.movement-form {
+  margin-top: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.movement-form label {
+  display: grid;
+  gap: 6px;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.movement-form input,
+.movement-form select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #dbe0e8;
+  border-radius: 8px;
+  background: white;
+  font: inherit;
+}
+
+.movement-success {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.movement-empty {
+  padding: 40px 0;
+  color: #64748b;
+  text-align: center;
+}
+
+.movement-list {
+  margin-top: 18px;
+}
+
+.movement-row {
+  padding: 14px 0;
+  display: grid;
+  grid-template-columns: 1.5fr 0.5fr 1fr;
+  gap: 14px;
+  align-items: center;
+  border-bottom: 1px solid #eef0f4;
+}
+
+.movement-row:last-child {
+  border-bottom: 0;
+}
+
+.movement-row p {
+  margin: 4px 0 0;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.movement-row span {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.movement-positive {
+  color: #15803d;
+}
+
+.movement-negative {
+  color: #b91c1c;
+}
+
 @media (max-width: 950px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .movement-workspace {
     grid-template-columns: 1fr;
   }
 }
@@ -334,35 +445,9 @@ button {
     grid-template-columns: 1fr;
   }
 
-  .product-row {
+  .product-row,
+  .movement-row {
     grid-template-columns: 1fr;
     gap: 6px;
-  }
-
-  .product-row-button {
-    width: 100%;
-    border: 0;
-    background: transparent;
-    text-align: left;
-    color: inherit;
-    cursor: pointer;
-  }
-
-  .product-row-button:hover {
-    background: #f8fafc;
-  }
-
-  .product-detail {
-    margin-top: 20px;
-    padding: 18px;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    background: #f8fafc;
-  }
-
-  .form-actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
   }
 }

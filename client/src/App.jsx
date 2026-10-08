@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar'
 import StatCard from './components/StatCard'
 import { apiRequest } from './lib/api'
 import ProductForm from './components/ProductForm'
+import StockMovementPanel from './components/StockMovementPanel'
 
 function App() {
   const [products, setProducts] = useState([])
@@ -193,6 +194,7 @@ function App() {
             </div>
           </article>
         </section>
+        <StockMovementPanel />
       </main>
     </div>
   )

@@ -214,4 +214,18 @@ public class InventoryService {
                 normalizedCategory
         );
     }
+
+    public List<StockMovement> getMovementsForRecord(
+        String sku,
+        String locationCode) {
+
+        InventoryRecord record = findInventoryRecord(sku, locationCode);
+
+        if (record == null) {
+            throw new IllegalArgumentException("Inventory record not found.");
+        }
+
+        return stockMovementRepository
+                .findByInventoryRecordIdOrderByCreatedAtDesc(record.getId());
+    }
 }
