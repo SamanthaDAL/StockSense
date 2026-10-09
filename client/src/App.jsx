@@ -5,6 +5,7 @@ import StatCard from './components/StatCard'
 import { apiRequest } from './lib/api'
 import ProductForm from './components/ProductForm'
 import StockMovementPanel from './components/StockMovementPanel'
+import ReplenishmentPanel from './components/ReplenishmentPanel'
 
 function App() {
   const [products, setProducts] = useState([])
@@ -195,6 +196,7 @@ function App() {
           </article>
         </section>
         <StockMovementPanel />
+        <ReplenishmentPanel />
       </main>
     </div>
   )
