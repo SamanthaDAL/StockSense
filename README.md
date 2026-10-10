@@ -1,39 +1,36 @@
 # StockSense
 
-StockSense is a modern inventory operations platform built as the successor to an earlier Java/OOP Inventory Management System.
+StockSense is a full-stack inventory operations platform built as the successor to an earlier Java/OOP Inventory Management System.
 
-The project focuses on inventory quantity integrity, stock movement auditability, low-stock visibility, and restock workflows.
+The project focuses on inventory quantity integrity, auditable stock movements, low-stock visibility, and structured restock workflows.
+
+## Technology Stack
+
+### Backend
+- Java 17
+- Spring Boot
+- Maven
+- Spring Data JPA
+- PostgreSQL
+- JUnit 5
+- Mockito
+- Springdoc OpenAPI / Swagger
+
+### Frontend
+- React
+- Vite
+- JavaScript
+- Nginx
+
+### Platform
+- Docker
+- Docker Compose
 
 ## Project Structure
 
-- `server/` - Java backend workspace
-- `client/` - frontend workspace reserved for the later React phase
-
-## Current Stage
-
-S01 - repository and Java/Maven baseline.
-
-## Run the Java Baseline
-
-From the `server` folder:
-
-mvn compile
-
-Then run:
-
-java -cp target\classes com.stocksense.StockSenseApplication
-
-Expected output:
-
-StockSense Java baseline is running.
-
-## Planned Stack
-
-- Java 17
-- Maven
-- Spring Boot
-- PostgreSQL
-- React
-- Docker
-- Jenkins
-- AWS
+```text
+StockSense/
+├── client/              React/Vite frontend
+├── server/              Spring Boot backend
+├── docker-compose.yml   Local container stack
+└── README.md
