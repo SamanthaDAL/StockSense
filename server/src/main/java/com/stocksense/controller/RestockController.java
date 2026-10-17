@@ -1,15 +1,5 @@
 package com.stocksense.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
-
 import com.stocksense.domain.RestockRequest;
 import com.stocksense.dto.RestockRequestCreateRequest;
 import com.stocksense.dto.RestockRequestResponse;
@@ -17,9 +7,22 @@ import com.stocksense.service.RestockService;
 
 import jakarta.validation.Valid;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/restocks")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://df1sfwtnul5fy.cloudfront.net"
+})
 public class RestockController {
 
     private final RestockService restockService;
@@ -51,28 +54,28 @@ public class RestockController {
 
     @PostMapping("/{id}/approve")
     public RestockRequestResponse approve(
-            @PathVariable Long id) {
+            @PathVariable("id") Long id) {
 
         return toResponse(restockService.approve(id));
     }
 
     @PostMapping("/{id}/order")
     public RestockRequestResponse markOrdered(
-            @PathVariable Long id) {
+            @PathVariable("id") Long id) {
 
         return toResponse(restockService.markOrdered(id));
     }
 
     @PostMapping("/{id}/receive")
     public RestockRequestResponse markReceived(
-            @PathVariable Long id) {
+            @PathVariable("id") Long id) {
 
         return toResponse(restockService.markReceived(id));
     }
 
     @PostMapping("/{id}/cancel")
     public RestockRequestResponse cancel(
-            @PathVariable Long id) {
+            @PathVariable("id") Long id) {
 
         return toResponse(restockService.cancel(id));
     }
@@ -82,8 +85,12 @@ public class RestockController {
 
         return new RestockRequestResponse(
                 request.getId(),
-                request.getInventoryRecord().getProduct().getSku(),
-                request.getInventoryRecord().getLocation().getCode(),
+                request.getInventoryRecord()
+                        .getProduct()
+                        .getSku(),
+                request.getInventoryRecord()
+                        .getLocation()
+                        .getCode(),
                 request.getRequestedQuantity(),
                 request.getStatus()
         );

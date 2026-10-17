@@ -3,29 +3,29 @@ package com.stocksense.controller;
 import com.stocksense.domain.Product;
 import com.stocksense.dto.ProductRequest;
 import com.stocksense.dto.ProductResponse;
+import com.stocksense.dto.ProductUpdateRequest;
 import com.stocksense.service.InventoryService;
 
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.web.bind.annotation.GetMapping;
-
-import org.springframework.web.bind.annotation.PathVariable;
-
-import com.stocksense.dto.ProductUpdateRequest;
-import org.springframework.web.bind.annotation.PutMapping;
-
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://df1sfwtnul5fy.cloudfront.net"
+})
 public class ProductController {
 
     private final InventoryService inventoryService;
@@ -35,7 +35,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductResponse createProduct(@Valid @RequestBody ProductRequest request) {
+    public ProductResponse createProduct(
+            @Valid @RequestBody ProductRequest request) {
 
         Product product = new Product(
                 request.getSku(),
@@ -68,7 +69,9 @@ public class ProductController {
     }
 
     @GetMapping("/{sku}")
-    public ProductResponse getProductBySku(@PathVariable("sku") String sku) {
+    public ProductResponse getProductBySku(
+            @PathVariable("sku") String sku) {
+
         Product product = inventoryService.findProductBySku(sku);
 
         if (product == null) {

@@ -15,13 +15,16 @@ public class RestockService {
 
     private final RestockRequestRepository restockRequestRepository;
     private final InventoryRecordRepository inventoryRecordRepository;
+    private final InventoryService inventoryService;
 
     public RestockService(
             RestockRequestRepository restockRequestRepository,
-            InventoryRecordRepository inventoryRecordRepository) {
+            InventoryRecordRepository inventoryRecordRepository,
+            InventoryService inventoryService) {
 
         this.restockRequestRepository = restockRequestRepository;
         this.inventoryRecordRepository = inventoryRecordRepository;
+        this.inventoryService = inventoryService;
     }
 
     @Transactional
@@ -69,7 +72,15 @@ public class RestockService {
     @Transactional
     public RestockRequest markReceived(Long id) {
         RestockRequest request = findById(id);
+
         request.markReceived();
+
+        inventoryService.stockIn(
+                request.getInventoryRecord().getProduct().getSku(),
+                request.getInventoryRecord().getLocation().getCode(),
+                request.getRequestedQuantity()
+        );
+
         return restockRequestRepository.save(request);
     }
 

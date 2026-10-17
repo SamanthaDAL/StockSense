@@ -4,12 +4,19 @@
     sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  color: #172033;
+  background: #f4f7fb;
+}
+
+html {
+  background: #f4f7fb;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: #f4f7fb;
 }
 
 button,
@@ -17,4 +24,11 @@ input,
 select,
 textarea {
   font-family: inherit;
+}
+
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
 }

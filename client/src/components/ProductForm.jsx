@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { apiRequest } from '../lib/api'
 
 export default function ProductForm({
@@ -7,33 +7,24 @@ export default function ProductForm({
     onProductUpdated,
     onCancelEdit,
 }) {
-    const [form, setForm] = useState({
-        sku: '',
-        name: '',
-        category: '',
-        reorderLevel: 0,
-    })
-
-    const [submitting, setSubmitting] = useState(false)
-    const [error, setError] = useState('')
-
-    useEffect(() => {
-        if (selectedProduct) {
-            setForm({
+    const [form, setForm] = useState(() =>
+        selectedProduct
+            ? {
                 sku: selectedProduct.sku,
                 name: selectedProduct.name,
                 category: selectedProduct.category,
                 reorderLevel: selectedProduct.reorderLevel,
-            })
-        } else {
-            setForm({
+            }
+            : {
                 sku: '',
                 name: '',
                 category: '',
                 reorderLevel: 0,
-            })
-        }
-    }, [selectedProduct])
+            }
+    )
+
+    const [submitting, setSubmitting] = useState(false)
+    const [error, setError] = useState('')
 
     function handleChange(event) {
         const { name, value } = event.target
@@ -87,76 +78,83 @@ export default function ProductForm({
     }
 
     return (
-        <form className="product-form" onSubmit={handleSubmit}>
-            <h3>{selectedProduct ? 'Edit product' : 'Add product'}</h3>
+        <form className="product-form product-form-modal" onSubmit={handleSubmit}>
+            <div className="form-intro">
+                <p className="eyebrow">{selectedProduct ? 'Product details' : 'Catalog setup'}</p>
+                <h3>{selectedProduct ? 'Edit product' : 'Add a new product'}</h3>
+                <p className="section-description">
+                    {selectedProduct
+                        ? 'Update the product information below. The SKU stays fixed so inventory history remains linked correctly.'
+                        : 'Create a catalog item first. Stock levels are recorded separately through Stock Movements.'}
+                </p>
+            </div>
 
-            <label>
-                SKU
-                <input
-                    name="sku"
-                    value={form.sku}
-                    onChange={handleChange}
-                    disabled={Boolean(selectedProduct)}
-                    required
-                />
-            </label>
+            <div className="form-field-grid">
+                <label className="form-field">
+                    <span className="field-label">SKU</span>
+                    <span className="field-help">A unique code used to identify this product.</span>
+                    <input
+                        name="sku"
+                        value={form.sku}
+                        onChange={handleChange}
+                        disabled={Boolean(selectedProduct)}
+                        placeholder="e.g. INV-001"
+                        required
+                    />
+                </label>
 
-            <label>
-                Name
-                <input
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
+                <label className="form-field">
+                    <span className="field-label">Product name</span>
+                    <span className="field-help">Use a clear name that people can recognise quickly.</span>
+                    <input
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        placeholder="e.g. Wireless Barcode Scanner"
+                        required
+                    />
+                </label>
 
-            <label>
-                Category
-                <input
-                    name="category"
-                    value={form.category}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
+                <label className="form-field">
+                    <span className="field-label">Category</span>
+                    <span className="field-help">Group similar products for easier scanning and reporting.</span>
+                    <input
+                        name="category"
+                        value={form.category}
+                        onChange={handleChange}
+                        placeholder="e.g. Hardware"
+                        required
+                    />
+                </label>
 
-            <label>
-                Reorder level
-                <input
-                    type="number"
-                    name="reorderLevel"
-                    min="0"
-                    value={form.reorderLevel}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
+                <label className="form-field">
+                    <span className="field-label">Reorder level</span>
+                    <span className="field-help">StockSense flags inventory as low when quantity reaches this threshold.</span>
+                    <input
+                        type="number"
+                        name="reorderLevel"
+                        min="0"
+                        value={form.reorderLevel}
+                        onChange={handleChange}
+                        required
+                    />
+                </label>
+            </div>
 
             {error && <p className="form-error">{error}</p>}
 
-            <div className="form-actions">
-                <button
-                    className="primary-button"
-                    type="submit"
-                    disabled={submitting}
-                >
+            <div className="form-actions form-actions-right">
+                <button className="secondary-button" type="button" onClick={onCancelEdit}>
+                    Cancel
+                </button>
+
+                <button className="primary-button" type="submit" disabled={submitting}>
                     {submitting
                         ? 'Saving...'
                         : selectedProduct
-                            ? 'Update Product'
-                            : 'Create Product'}
+                            ? 'Save changes'
+                            : 'Create product'}
                 </button>
-
-                {selectedProduct && (
-                    <button
-                        className="secondary-button"
-                        type="button"
-                        onClick={onCancelEdit}
-                    >
-                        Cancel
-                    </button>
-                )}
             </div>
         </form>
     )
