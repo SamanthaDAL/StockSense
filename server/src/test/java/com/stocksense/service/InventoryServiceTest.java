@@ -3,6 +3,7 @@ package com.stocksense.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -97,6 +98,75 @@ class InventoryServiceTest {
 
         assertEquals(
                 5,
+                movement.getQuantityDelta()
+        );
+    }
+
+    @Test
+    void stockInShouldCreateInventoryRecordWhenMissing() {
+        Product product = new Product(
+                "NEW-001",
+                "New Product",
+                "Testing",
+                5
+        );
+
+        Location location = new Location(
+                "NEW-WH",
+                "New Warehouse"
+        );
+
+        when(inventoryRecordRepository
+                .findByProductSkuAndLocationCode(
+                        "NEW-001",
+                        "NEW-WH"
+                ))
+                .thenReturn(Optional.empty());
+
+        when(productRepository.findBySku("NEW-001"))
+                .thenReturn(Optional.of(product));
+
+        when(locationRepository.findByCode("NEW-WH"))
+                .thenReturn(Optional.of(location));
+
+        when(inventoryRecordRepository.save(any(InventoryRecord.class)))
+                .thenAnswer(invocation ->
+                        invocation.getArgument(0)
+                );
+
+        InventoryRecord result =
+                inventoryService.stockIn(
+                        "NEW-001",
+                        "NEW-WH",
+                        4
+                );
+
+        assertEquals(4, result.getQuantity());
+
+        verify(productRepository)
+                .findBySku("NEW-001");
+
+        verify(locationRepository)
+                .findByCode("NEW-WH");
+
+        verify(inventoryRecordRepository, times(2))
+                .save(any(InventoryRecord.class));
+
+        ArgumentCaptor<StockMovement> movementCaptor =
+                ArgumentCaptor.forClass(StockMovement.class);
+
+        verify(stockMovementRepository)
+                .save(movementCaptor.capture());
+
+        StockMovement movement = movementCaptor.getValue();
+
+        assertEquals(
+                StockMovementType.STOCK_IN,
+                movement.getType()
+        );
+
+        assertEquals(
+                4,
                 movement.getQuantityDelta()
         );
     }

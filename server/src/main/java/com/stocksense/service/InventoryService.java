@@ -113,11 +113,27 @@ public class InventoryService {
         InventoryRecord record = findInventoryRecord(sku, locationCode);
 
         if (record == null) {
-            throw new IllegalArgumentException("Inventory record not found.");
+            Product product = productRepository
+                    .findBySku(sku)
+                    .orElseThrow(() ->
+                            new IllegalArgumentException("Product not found.")
+                    );
+
+            Location location = locationRepository
+                    .findByCode(locationCode)
+                    .orElseThrow(() ->
+                            new IllegalArgumentException("Location not found.")
+                    );
+
+            record = inventoryRecordRepository.save(
+                    new InventoryRecord(product, location, 0)
+            );
         }
 
         record.stockIn(amount);
-        InventoryRecord savedRecord = inventoryRecordRepository.save(record);
+
+        InventoryRecord savedRecord =
+                inventoryRecordRepository.save(record);
 
         StockMovement movement = new StockMovement(
                 savedRecord,
